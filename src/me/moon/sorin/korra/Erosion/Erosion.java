@@ -1,4 +1,4 @@
-package me.moon.korra.Erosion;
+package me.moon.sorin.korra.Erosion;
 
 import java.util.logging.Level;
 
