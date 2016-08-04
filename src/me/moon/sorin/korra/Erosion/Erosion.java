@@ -17,10 +17,24 @@ import com.projectkorra.projectkorra.ability.AirAbility;
 public class Erosion extends AirAbility implements AddonAbility {
 	
 	private Location loc;
+	private Location loc2;
+	private Location loc3;
+	
 	private Player player;
 	private Location start;
 	private Vector dir;
 	private Permission perm;
+	private double x;
+	private double y;
+	private double z;
+	
+	private double x2;
+	private double y2;
+	private double z2;
+	
+	private double curveTime;
+	
+	private boolean curve;
 	
 	public Erosion(Player player) {
 		super(player);
@@ -28,6 +42,17 @@ public class Erosion extends AirAbility implements AddonAbility {
 		this.start = player.getLocation();
 		this.dir = player.getEyeLocation().getDirection().multiply(2);
 		this.loc = player.getLocation();
+		
+		x = player.getEyeLocation().getX();
+		y = player.getLocation().getY();
+		z = player.getLocation().getZ();
+		
+		x2 = player.getEyeLocation().getX();
+		y2 = player.getLocation().getY();
+		z2 = player.getLocation().getZ();
+		
+		curve = true;
+		
 		start();
 	}
 
@@ -64,6 +89,13 @@ public class Erosion extends AirAbility implements AddonAbility {
 		
 		
 		this.loc.add(dir);
+		this.loc2.add(dir);
+		this.loc3.add(dir);
+		if(curveTime < 30) {
+			curveTime++;
+		} else {
+			curveTime--;
+		}
 		
 		if (player.isDead() || !player.isOnline()) {
 			remove();
@@ -92,8 +124,38 @@ public class Erosion extends AirAbility implements AddonAbility {
 		return "Moon243";
 	}
 	
-	public void doParticles() {
+	public void doParticlesLoc() {
 		
+	}
+	
+	public void doParticlesLoc2() {
+		if(curveTime < 30 && curve) {
+			x+= 0.1;
+			y+= 0.1;
+			z+= 0.1;
+		} else if (!(curveTime < 30)) {
+			curve = false;
+		} else if(!(curveTime <= 0) && !curve) {
+			x-= 0.1;
+			y-=0.1;
+			z-=0.1;
+		}
+		loc2.add(x, y, z);
+	}
+	
+	public void doParticlesLoc3() {
+		if(curveTime < 30 && curve) {
+			x2-= 0.1;
+			y2-= 0.1;
+			z2-= 0.1;
+		} else if (!(curveTime < 30)) {
+			curve = false;
+		} else if(!(curveTime <= 0) && !curve) {
+			x2+= 0.1;
+			y2+=0.1;
+			z2+=0.1;
+		}
+		loc3.add(x2, y2, z2);
 	}
 	
 	public void doExplosion() {
